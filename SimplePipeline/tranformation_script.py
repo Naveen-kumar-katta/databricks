@@ -9,10 +9,10 @@ from datetime import datetime          # Used for working with date and time
 spark = SparkSession.builder.appName('Employee_ETL_Demo').getOrCreate()
 
 # Step 2: Defining file paths for employee CSV chunks and department JSONL file
-department_file_path = 's3a://aws-databricks-practice/emp_dept_sample_data/department_json_data/departments.jsonl'
+department_file_path = 's3a://your_s3_bucket_name/emp_dept_sample_data/department_json_data/departments.jsonl'
 
 # The asterisk (*) acts as a wildcard to match all CSV files in the folder (e.g., chunk1.csv, chunk2.csv, etc.).
-employee_file_path = "s3a://aws-databricks-practice/emp_dept_sample_data/employees_csv_chunks/*.csv"
+employee_file_path = "s3a://your_s3_bucket_name/emp_dept_sample_data/employees_csv_chunks/*.csv"
 
 
 # Step 3: Defining custom schemas (optional if inferSchema is used)
@@ -60,7 +60,7 @@ df_joined = df_emp_filtered.join(df_dept, on='department_id', how='inner')
 cur_date = datetime.now()
 year, month, day = cur_date.year, cur_date.month, cur_date.day
 # Define the S3 path for storing the output
-output_path = f"s3a://aws-databricks-practice/processed_data/{year}/{month}/{day}/"
+output_path = f"s3a://your_s3_bucket_name/processed_data/{year}/{month}/{day}/"
 
 # Write the transformed data to S3 as a single CSV file
 df_joined.coalesce(1).write.option("header", "true").csv(output_path)
